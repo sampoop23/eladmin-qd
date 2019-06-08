@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" label-position="left" label-width="0px" class="login-form">
-      <h3 class="title">el-admin 后台管理系统</h3>
+      <h3 class="title">市政垃圾综合管理服务平台</h3>
       <el-form-item prop="username">
         <el-input v-model="loginForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon" style="height: 39px;width: 13px;margin-left: 2px;" />
@@ -103,7 +103,8 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100%;
-    background-image:url(	https://aurora-1255840532.cos.ap-chengdu.myqcloud.com/1547428971990.jpg);
+    /*background-image:url(	https://aurora-1255840532.cos.ap-chengdu.myqcloud.com/1547428971990.jpg);*/
+    background-color: #304156;
     background-size: cover;
   }
   .title {
