@@ -64,7 +64,7 @@ export default {
   methods: {
     checkPermission,
     beforeInit() {
-      this.url = 'api/dictDetail'
+      this.url = 'system/api/dictDetail'
       this.params = { page: this.page, size: this.size, dictName: this.dictName }
       const query = this.query
       const value = query.value

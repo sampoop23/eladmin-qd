@@ -46,7 +46,7 @@ export default {
   methods: {
     parseTime,
     beforeInit() {
-      this.url = 'api/generator/tables'
+      this.url = 'system/api/generator/tables'
       const query = this.query
       const name = query.name
       this.params = { page: this.page, size: this.size }

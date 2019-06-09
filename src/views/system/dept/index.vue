@@ -70,7 +70,7 @@ export default {
     parseTime,
     checkPermission,
     beforeInit() {
-      this.url = 'api/dept'
+      this.url = 'system/api/dept'
       const sort = 'id,desc'
       this.params = { page: this.page, size: this.size, sort: sort }
       const query = this.query

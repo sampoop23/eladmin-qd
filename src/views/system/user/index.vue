@@ -101,7 +101,7 @@ export default {
     parseTime,
     checkPermission,
     beforeInit() {
-      this.url = 'api/users'
+      this.url = 'system/api/users'
       const sort = 'id,desc'
       const query = this.query
       const type = query.type

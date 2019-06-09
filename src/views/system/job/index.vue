@@ -81,7 +81,7 @@ export default {
     parseTime,
     checkPermission,
     beforeInit() {
-      this.url = 'api/job'
+      this.url = 'system/api/job'
       const sort = 'sort,asc'
       this.params = { page: this.page, size: this.size, sort: sort }
       const query = this.query

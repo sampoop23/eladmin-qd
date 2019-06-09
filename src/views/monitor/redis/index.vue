@@ -64,7 +64,7 @@ export default {
   methods: {
     checkPermission,
     beforeInit() {
-      this.url = 'api/redis'
+      this.url = 'system/api/redis'
       const query = this.query
       const value = query.value
       this.params = { page: this.page, size: this.size }

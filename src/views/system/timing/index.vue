@@ -75,7 +75,7 @@ export default {
     parseTime,
     checkPermission,
     beforeInit() {
-      this.url = 'api/jobs'
+      this.url = 'system/api/jobs'
       const sort = 'id,desc'
       const query = this.query
       const value = query.value
