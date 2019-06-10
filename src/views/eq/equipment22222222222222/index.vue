@@ -68,8 +68,8 @@ import initDict from '@/mixins/initDict'
 import { del } from '@/api/user'
 import { getDepts } from '@/api/dept'
 import { parseTime } from '@/utils/index'
-import eHeader from './module/header'
-import edit from './module/edit'
+import eHeader from './module222222222222222/header'
+import edit from './module222222222222222/edit'
 export default {
   components: { eHeader, edit },
   mixins: [initData, initDict],
@@ -84,11 +84,12 @@ export default {
     }
   },
   created() {
+    alert('eq')
     this.getDeptDatas()
     this.$nextTick(() => {
       this.init()
       // 加载数据字典
-      this.getDict('user_status')
+      this.getDict('user_sxtatus')
     })
   },
   mounted: function() {

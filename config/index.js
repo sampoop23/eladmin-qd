@@ -10,18 +10,25 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api/auth': {
-        target: 'http://localhost:8000',  //目标接口域名
-        changeOrigin: true,  //是否跨域
-        pathRewrite: {
-          '^/api/auth': '/auth'   //重写接口
-        }
-      },
+      // '/api/auth': {
+      //   target: 'http://localhost:8000',  //目标接口域名
+      //   changeOrigin: true,  //是否跨域
+      //   pathRewrite: {
+      //     '^/api/auth': '/auth'   //重写接口
+      //   }
+      // },
       '/api/system/api': {
         target: 'http://localhost:8000',  //目标接口域名
         changeOrigin: true,  //是否跨域
         pathRewrite: {
           '^/api/system/api': '/api'   //重写接口
+        }
+      },
+      '/api': {
+        target: 'http://localhost:8000',  //目标接口域名
+        changeOrigin: true,  //是否跨域
+        pathRewrite: {
+          '^/api': '/'   //重写接口
         }
       }
     },

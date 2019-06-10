@@ -10,8 +10,8 @@
       <el-form-item v-if="form.pid !== 0" label="状态" prop="enabled">
         <el-radio v-for="item in dicts" :key="item.id" v-model="form.enabled" :label="item.value">{{ item.label }}</el-radio>
       </el-form-item>
-      <el-form-item label="所属部门">
-        <treeselect v-model="deptId" :options="depts" style="width: 370px" placeholder="选择部门" />
+      <el-form-item label="所属机构">
+        <treeselect v-model="deptId" :options="depts" style="width: 370px" placeholder="选择机构" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -73,7 +73,7 @@ export default {
         if (valid) {
           if (this.deptId === null || this.deptId === undefined) {
             this.$message({
-              message: '所属部门不能为空',
+              message: '所属机构不能为空',
               type: 'warning'
             })
           } else {

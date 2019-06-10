@@ -1,15 +1,24 @@
 <template>
-  <el-dialog :append-to-body="true" :visible.sync="dialog" :title="isAdd ? '新增机构' : '编辑机构'" width="500px">
-    <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-      <el-form-item label="名称" prop="name">
-        <el-input v-model="form.name" style="width: 370px;"/>
+  <el-dialog :append-to-body="true" :visible.sync="dialog" :title="isAdd ? '新增' : '编辑'" width="570px">
+    <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="66px">
+      <el-form-item label="gps号" >
+        <el-input v-model="form.gpsId" />
       </el-form-item>
-      <el-form-item v-if="form.pid !== 0" label="状态" prop="enabled">
-        <el-radio v-for="item in dicts" :key="item.id" v-model="form.enabled" :label="item.value">{{ item.label }}</el-radio>
+      <el-form-item label="设备号" >
+        <el-input v-model="form.equipmentNo" />
       </el-form-item>
-      <el-form-item v-if="form.pid !== 0" style="margin-bottom: 0px;" label="上级机构">
-        <treeselect v-model="form.pid" :options="depts" style="width: 370px;" placeholder="选择上级类目" />
+      <el-form-item label="设备名" >
+        <el-input v-model="form.equipmentName" />
       </el-form-item>
+      <!--<el-form-item label="设备类型" >
+        <el-input v-model="form.equipmentType" style="width: 370px;"/>
+      </el-form-item>-->
+      <el-form-item label="机构">
+        <treeselect v-model="deptId" :options="depts" :style="style" placeholder="选择机构" />
+      </el-form-item>
+      <!--<el-form-item label="deptId" >
+        <el-input v-model="form.deptId" style="width: 370px;"/>
+      </el-form-item>-->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button type="text" @click="cancel">取消</el-button>
@@ -19,7 +28,8 @@
 </template>
 
 <script>
-import { add, edit, getDepts } from '@/api/dept'
+import { add, edit } from '@/api/equipment'
+import { getDepts } from '@/api/dept'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 export default {
@@ -32,25 +42,24 @@ export default {
     sup_this: {
       type: Object,
       default: null
-    },
-    dicts: {
-      type: Array,
-      required: true
     }
   },
   data() {
     return {
-      loading: false, dialog: false, depts: [],
+      loading: false, dialog: false,
       form: {
         id: '',
-        name: '',
-        pid: 1,
-        enabled: 'true'
+        gpsId: '',
+        equipmentNo: '',
+        equipmentName: '',
+        equipmentType: '',
+        enabled: '',
+        createTime: '',
+        dept: { id: '' }
       },
+      depts: [], deptId: null,
+      style: 'width: 184px',
       rules: {
-        name: [
-          { required: true, message: '请输入名称', trigger: 'blur' }
-        ]
       }
     }
   },
@@ -59,19 +68,23 @@ export default {
       this.resetForm()
     },
     doSubmit() {
+      this.form.dept.id = this.deptId
+      //
       this.$refs['form'].validate((valid) => {
         if (valid) {
-          if (this.form.pid !== undefined) {
+          if (this.deptId === null || this.deptId === undefined) {
+            this.$message({
+              message: '机构不能为空',
+              type: 'warning'
+            })
+          } else {
             this.loading = true
             if (this.isAdd) {
               this.doAdd()
             } else this.doEdit()
-          } else {
-            this.$message({
-              message: '上级机构不能为空',
-              type: 'warning'
-            })
           }
+        } else {
+          return false
         }
       })
     },
@@ -110,9 +123,13 @@ export default {
       this.$refs['form'].resetFields()
       this.form = {
         id: '',
-        name: '',
-        pid: 1,
-        enabled: 'true'
+        gpsId: '',
+        equipmentNo: '',
+        equipmentName: '',
+        equipmentType: '',
+        enabled: '',
+        createTime: '',
+        deptId: ''
       }
     },
     getDepts() {

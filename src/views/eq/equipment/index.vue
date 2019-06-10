@@ -11,31 +11,28 @@
         <eHeader :query="query" :sup_this="sup_this" :dicts="dicts"/>
         <!--表格渲染-->
         <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
-          <el-table-column prop="username" label="用户名"/>
-          <el-table-column prop="phone" label="电话"/>
-          <el-table-column :show-overflow-tooltip="true" prop="email" label="邮箱"/>
-          <el-table-column label="机构 / 岗位">
+          <el-table-column prop="id" label="ID"/>
+          <el-table-column label="所属机构">
             <template slot-scope="scope">
-              <div>{{ scope.row.dept.name }} / {{ scope.row.job.name }}</div>
+              <div>{{ scope.row.dept.name }}</div>
             </template>
           </el-table-column>
-          <el-table-column label="状态" align="center">
-            <template slot-scope="scope">
-              <div v-for="item in dicts" :key="item.id">
-                <el-tag v-if="scope.row.enabled.toString() === item.value" :type="scope.row.enabled ? '' : 'info'">{{ item.label }}</el-tag>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column :show-overflow-tooltip="true" prop="createTime" label="创建日期">
+          <el-table-column prop="gpsId" label="gps号"/>
+          <el-table-column prop="equipmentNo" label="设备号"/>
+          <el-table-column prop="equipmentName" label="设备名"/>
+          <el-table-column prop="equipmentType" label="设备类型"/>
+          <el-table-column prop="enabled" label="状态：1启用、0禁用"/>
+          <el-table-column prop="createTime" label="创建日期">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column v-if="checkPermission(['ADMIN','USER_ALL','USER_EDIT','USER_DELETE'])" label="操作" width="125" align="center">
+          <el-table-column prop="deptId" label="deptId"/>
+          <el-table-column v-if="checkPermission(['ADMIN','EQUIPMENT_ALL','EQUIPMENT_EDIT','EQUIPMENT_DELETE'])" label="操作" width="150px" align="center">
             <template slot-scope="scope">
-              <edit v-permission="['ADMIN','USER_ALL','USER_EDIT']" :dicts="dicts" :data="scope.row" :sup_this="sup_this"/>
+              <edit v-permission="['ADMIN','EQUIPMENT_ALL','EQUIPMENT_EDIT']" :dicts="dicts" :data="scope.row" :sup_this="sup_this"/>
               <el-popover
-                v-permission="['ADMIN','USER_ALL','USER_DELETE']"
+                v-permission="['ADMIN','EQUIPMENT_ALL','EQUIPMENT_DELETE']"
                 :ref="scope.row.id"
                 placement="top"
                 width="180">
@@ -65,7 +62,7 @@
 import checkPermission from '@/utils/permission'
 import initData from '@/mixins/initData'
 import initDict from '@/mixins/initDict'
-import { del } from '@/api/user'
+import { del } from '@/api/equipment'
 import { getDepts } from '@/api/dept'
 import { parseTime } from '@/utils/index'
 import eHeader from './module/header'
@@ -75,8 +72,8 @@ export default {
   mixins: [initData, initDict],
   data() {
     return {
-      height: document.documentElement.clientHeight - 180 + 'px;',
-      delLoading: false, sup_this: this, deptName: '', depts: [], deptId: null,
+      delLoading: false, sup_this: this,
+      deptName: '', depts: [], deptId: null,
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -87,29 +84,19 @@ export default {
     this.getDeptDatas()
     this.$nextTick(() => {
       this.init()
-      // 加载数据字典
-      this.getDict('user_status')
     })
-  },
-  mounted: function() {
-    const that = this
-    window.onresize = function temp() {
-      that.height = document.documentElement.clientHeight - 180 + 'px;'
-    }
   },
   methods: {
     parseTime,
     checkPermission,
     beforeInit() {
-      this.url = 'system/api/users'
+      this.url = 'system/api/equipment'
       const sort = 'id,desc'
+      this.params = { page: this.page, size: this.size, sort: sort, deptId: this.deptId }
       const query = this.query
       const type = query.type
       const value = query.value
-      const enabled = query.enabled
-      this.params = { page: this.page, size: this.size, sort: sort, deptId: this.deptId }
       if (type && value) { this.params[type] = value }
-      if (enabled !== '' && enabled !== null) { this.params['enabled'] = enabled }
       return true
     },
     subDelete(id) {
@@ -150,4 +137,5 @@ export default {
 </script>
 
 <style scoped>
+
 </style>
