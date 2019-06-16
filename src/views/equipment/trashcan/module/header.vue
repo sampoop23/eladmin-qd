@@ -5,9 +5,9 @@
     <el-select v-model="query.type" clearable placeholder="类型" class="filter-item" style="width: 130px">
       <el-option v-for="item in queryTypeOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
     </el-select>
-    <el-select v-model="query.equipmentType" clearable placeholder="设备类型" class="filter-item" style="width: 90px" @change="toQuery">
+    <!--<el-select v-model="query.equipmentType" clearable placeholder="设备类型" class="filter-item" style="width: 90px" @change="toQuery">
       <el-option v-for="item in equipmentTypeOptions" :key="item.key" :label="item.display_name" :value="item.key"/>
-    </el-select>
+    </el-select>-->
     <el-button class="filter-item" size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
     <!-- 新增 -->
     <div style="display: inline-block;margin: 0px 2px;">
@@ -18,7 +18,7 @@
         type="primary"
         icon="el-icon-plus"
         @click="add">新增</el-button>
-      <eForm ref="form" :is-add="true"/>
+      <eForm ref="form" :sup_this="sup_this" :is-add="true" :dicts="dicts"/>
     </div>
     <!-- 导出 -->
     <div style="display: inline-block;">
@@ -58,14 +58,14 @@ export default {
       downloadLoading: false,
       queryTypeOptions: [
         { key: 'gpsId', display_name: '模块识别码' },
-        { key: 'equipmentNo', display_name: '设备ID' },
+        { key: 'equipmentNo', display_name: '设备编号' },
         { key: 'equipmentName', display_name: '设备名' }
-      ],
-      equipmentTypeOptions: [
-        { key: '1', display_name: '汽车' },
-        { key: '2', display_name: '飞机' },
-        { key: '3', display_name: '轮船' }
       ]
+      // equipmentTypeOptions: [
+      //   { key: '1', display_name: '汽车' },
+      //   { key: '2', display_name: '飞机' },
+      //   { key: '3', display_name: '轮船' }
+      // ]
     }
   },
   methods: {
@@ -74,15 +74,17 @@ export default {
       this.$refs.form.dialog = true
     },
     toQuery() {
-      this.$parent.page = 0
-      this.$parent.init()
+      // this.$parent.page = 0
+      // this.$parent.init()
+      this.sup_this.page = 0
+      this.sup_this.init()
     },
     // 导出
     download() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['ID', '用户名', '邮箱', '头像地址', '状态', '注册日期', '最后修改密码日期']
-        const filterVal = ['id', 'username', 'email', 'avatar', 'enabled', 'createTime', 'lastPasswordResetTime']
+        const tHeader = ['ID', '模块识别码', '设备编号', '设备名', '状态', '注册日期']
+        const filterVal = ['id', 'gpsId', 'equipmentNo', 'equipmentName', 'enabled', 'createTime']
         const data = this.formatJson(filterVal, this.sup_this.data)
         excel.export_json_to_excel({
           header: tHeader,

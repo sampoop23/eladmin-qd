@@ -4,13 +4,13 @@
       <el-form-item label="所属机构">
         <treeselect v-model="deptId" :options="depts" :style="style" placeholder="选择机构" />
       </el-form-item>
-      <el-form-item label="模块识别码" >
+      <el-form-item label="模块识别码" prop="gpsId">
         <el-input v-model="form.gpsId" :style="style" />
       </el-form-item>
-      <el-form-item label="设备ID" >
+      <el-form-item label="设备编号" prop="equipmentNo">
         <el-input v-model="form.equipmentNo" :style="style" />
       </el-form-item>
-      <el-form-item label="设备名" >
+      <el-form-item label="设备名" prop="equipmentName">
         <el-input v-model="form.equipmentName" :style="style" />
       </el-form-item>
       <el-form-item label="省/市/区" >
@@ -86,6 +86,18 @@ export default {
       // equipmentName: null,
       style: 'width: 184px',
       rules: {
+        gpsId: [
+          { required: true, message: '请输入模块识别码', trigger: 'blur' },
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+        ],
+        equipmentNo: [
+          { required: true, message: '请输入设备编号', trigger: 'blur' },
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+        ],
+        equipmentName: [
+          { required: true, message: '请输入设备名称', trigger: 'blur' },
+          { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+        ]
       },
       options: regionData,
       addressSelectedOptions: []
@@ -133,7 +145,6 @@ export default {
           duration: 2500
         })
         this.loading = false
-        // this.$parent.$parent.init()
         this.sup_this.init()
       }).catch(err => {
         this.loading = false
@@ -158,6 +169,8 @@ export default {
     resetForm() {
       this.dialog = false
       this.$refs['form'].resetFields()
+      this.deptId = null
+      this.addressSelectedOptions = []
       this.form = {
         // id: '',
         gpsId: '',

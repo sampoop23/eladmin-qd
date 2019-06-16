@@ -13,6 +13,7 @@ export default {
       type: Object,
       required: true
     },
+    // index.vue 的this 可用于刷新数据
     sup_this: {
       type: Object,
       required: true

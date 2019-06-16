@@ -17,7 +17,7 @@
             </template>
           </el-table-column>
           <el-table-column prop="gpsId" label="模块识别码"/>
-          <el-table-column prop="equipmentNo" label="设备ID"/>
+          <el-table-column prop="equipmentNo" label="设备编号"/>
           <el-table-column prop="equipmentName" label="设备名"/>
           <el-table-column label="省">
             <template slot-scope="scope">
