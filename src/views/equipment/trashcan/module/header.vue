@@ -12,7 +12,7 @@
     <!-- 新增 -->
     <div style="display: inline-block;margin: 0px 2px;">
       <el-button
-        v-permission="['ADMIN','EQUIPMENT_ALL','EQUIPMENT_CREATE']"
+        v-permission="['ADMIN','EQUIPMENT_TRASHCAN_ALL','EQUIPMENT_TRASHCAN_CREATE']"
         class="filter-item"
         size="mini"
         type="primary"
@@ -57,8 +57,8 @@ export default {
     return {
       downloadLoading: false,
       queryTypeOptions: [
-        { key: 'gpsId', display_name: 'gps号' },
-        { key: 'equipmentNo', display_name: '设备号' },
+        { key: 'gpsId', display_name: '模块识别码' },
+        { key: 'equipmentNo', display_name: '设备ID' },
         { key: 'equipmentName', display_name: '设备名' }
       ],
       equipmentTypeOptions: [

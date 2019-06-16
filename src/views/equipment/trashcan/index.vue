@@ -11,28 +11,41 @@
         <eHeader :query="query" :sup_this="sup_this" :dicts="dicts"/>
         <!--表格渲染-->
         <el-table v-loading="loading" :data="data" size="small" style="width: 100%;">
-          <el-table-column prop="id" label="ID"/>
           <el-table-column label="所属机构">
             <template slot-scope="scope">
               <div>{{ scope.row.dept.name }}</div>
             </template>
           </el-table-column>
-          <el-table-column prop="gpsId" label="gps号"/>
-          <el-table-column prop="equipmentNo" label="设备号"/>
+          <el-table-column prop="gpsId" label="模块识别码"/>
+          <el-table-column prop="equipmentNo" label="设备ID"/>
           <el-table-column prop="equipmentName" label="设备名"/>
-          <el-table-column prop="equipmentType" label="设备类型"/>
-          <el-table-column prop="enabled" label="状态：1启用、0禁用"/>
+          <el-table-column label="省">
+            <template slot-scope="scope">
+              <div>{{ CodeToText[scope.row.addressProv] }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="市">
+            <template slot-scope="scope">
+              <div>{{ CodeToText[scope.row.addressCity] }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column label="区">
+            <template slot-scope="scope">
+              <div>{{ CodeToText[scope.row.addressRegion] }}</div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="addressStreet" label="街道"/>
+          <el-table-column prop="addressRoom" label="门牌"/>
           <el-table-column prop="createTime" label="创建日期">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="deptId" label="deptId"/>
-          <el-table-column v-if="checkPermission(['ADMIN','EQUIPMENT_ALL','EQUIPMENT_EDIT','EQUIPMENT_DELETE'])" label="操作" width="150px" align="center">
+          <el-table-column v-if="checkPermission(['ADMIN','EQUIPMENT_TRASHCAN_ALL','EQUIPMENT_TRASHCAN_EDIT','EQUIPMENT_TRASHCAN_DELETE'])" label="操作" width="150px" align="center">
             <template slot-scope="scope">
-              <edit v-permission="['ADMIN','EQUIPMENT_ALL','EQUIPMENT_EDIT']" :dicts="dicts" :data="scope.row" :sup_this="sup_this"/>
+              <edit v-permission="['ADMIN','EQUIPMENT_TRASHCAN_ALL','EQUIPMENT_TRASHCAN_EDIT']" :dicts="dicts" :data="scope.row" :sup_this="sup_this"/>
               <el-popover
-                v-permission="['ADMIN','EQUIPMENT_ALL','EQUIPMENT_DELETE']"
+                v-permission="['ADMIN','EQUIPMENT_TRASHCAN_ALL','EQUIPMENT_TRASHCAN_DELETE']"
                 :ref="scope.row.id"
                 placement="top"
                 width="180">
@@ -59,10 +72,11 @@
 </template>
 
 <script>
+import { CodeToText } from 'element-china-area-data'
 import checkPermission from '@/utils/permission'
 import initData from '@/mixins/initData'
 import initDict from '@/mixins/initDict'
-import { del } from '@/api/equipment'
+import { del } from '@/api/equipmentTrashcan'
 import { getDepts } from '@/api/dept'
 import { parseTime } from '@/utils/index'
 import eHeader from './module/header'
@@ -73,7 +87,10 @@ export default {
   data() {
     return {
       delLoading: false, sup_this: this,
-      deptName: '', depts: [], deptId: null,
+      deptName: '',
+      depts: [],
+      deptId: null,
+      CodeToText: CodeToText,
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -90,7 +107,7 @@ export default {
     parseTime,
     checkPermission,
     beforeInit() {
-      this.url = 'system/api/equipment'
+      this.url = 'system/api/equipment/trashcan'
       const sort = 'id,desc'
       this.params = { page: this.page, size: this.size, sort: sort, deptId: this.deptId }
       const query = this.query
