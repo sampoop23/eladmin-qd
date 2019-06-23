@@ -1,7 +1,7 @@
 <template>
-  <el-dialog :append-to-body="true" :visible.sync="dialog" :title="isAdd ? '新增' : '编辑'" width="700px">
-    <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="90px">
-      <el-form-item label="所属机构">
+  <el-dialog :append-to-body="true" :visible.sync="dialog" :title="isAdd ? '新增' : '编辑'" width="800px">
+    <el-form ref="form" :inline="true" :model="form" :rules="rules" size="small" label-width="110px">
+      <el-form-item label="所属机构" prop="deptId">
         <treeselect v-model="deptId" :options="depts" :style="style" placeholder="选择机构" />
       </el-form-item>
       <el-form-item label="模块识别码" prop="gpsId">
@@ -10,23 +10,32 @@
       <el-form-item label="设备编号" prop="equipmentNo">
         <el-input v-model="form.equipmentNo" :style="style" />
       </el-form-item>
-      <el-form-item label="设备名" prop="equipmentName">
+      <el-form-item label="设备名称" prop="equipmentName">
         <el-input v-model="form.equipmentName" :style="style" />
       </el-form-item>
-      <el-form-item label="省/市/区" >
+      <el-form-item label="省/市/区" prop="addressSelectedOptions">
         <el-cascader
           :options="options"
           v-model="addressSelectedOptions"
           size="large"
-          style="width: 470px;"
+          style="width: 520px;"
           @change="handleChange"
         />
       </el-form-item>
-      <el-form-item label="街道地址" >
+      <el-form-item label="街道地址" prop="addressStreet">
         <el-input v-model="form.addressStreet" :style="style" />
       </el-form-item>
-      <el-form-item label="小区/房号" >
+      <el-form-item label="小区/房号" prop="addressRoom">
         <el-input v-model="form.addressRoom" :style="style" />
+      </el-form-item>
+      <el-form-item label="岗位">
+        <el-select v-model="jobId" :style="style" placeholder="请先选择机构">
+          <el-option
+            v-for="(item, index) in jobs"
+            :key="item.name + index"
+            :label="item.name"
+            :value="item.id"/>
+        </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -39,6 +48,7 @@
 <script>
 import { add, edit } from '@/api/equipmentTrashcan'
 import { getDepts } from '@/api/dept'
+import { getAllJob } from '@/api/job'
 import Treeselect from '@riophae/vue-treeselect'
 import { regionData } from 'element-china-area-data'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
@@ -80,12 +90,15 @@ export default {
           id: ''
         }
       },
-      depts: [],
-      deptId: null,
+      depts: [], deptId: null,
+      jobs: [], jobId: null,
       // equipmentNo: null,
       // equipmentName: null,
-      style: 'width: 184px',
+      style: 'width: 200px',
       rules: {
+        deptId: [
+          { required: true, message: '请选择所属机构', trigger: 'blur' }
+        ],
         gpsId: [
           { required: true, message: '请输入模块识别码', trigger: 'blur' },
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
@@ -97,6 +110,15 @@ export default {
         equipmentName: [
           { required: true, message: '请输入设备名称', trigger: 'blur' },
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
+        ],
+        addressSelectedOptions: [
+          { required: true, message: '请选择省/市/区', trigger: 'blur' }
+        ],
+        addressStreet: [
+          { required: true, message: '请输入街道地址', trigger: 'blur' }
+        ],
+        addressRoom: [
+          { required: true, message: '请输入小区/房号', trigger: 'blur' }
         ]
       },
       options: regionData,
@@ -170,6 +192,7 @@ export default {
       this.dialog = false
       this.$refs['form'].resetFields()
       this.deptId = null
+      this.jobId = null
       this.addressSelectedOptions = []
       this.form = {
         // id: '',
@@ -197,6 +220,13 @@ export default {
     getDepts() {
       getDepts({ enabled: true }).then(res => {
         this.depts = res.content
+      })
+    },
+    getJobs(id) {
+      getAllJob(id).then(res => {
+        this.jobs = res.content
+      }).catch(err => {
+        console.log(err.response.data.message)
       })
     },
     handleChange(value) {

@@ -20,6 +20,16 @@
         @click="add">新增</el-button>
       <eForm ref="form" :sup_this="sup_this" :is-add="true" :dicts="dicts"/>
     </div>
+    <!-- 上传 -->
+    <div style="display: inline-block;margin: 0px 2px;">
+      <el-button
+        class="filter-item"
+        size="mini"
+        type="primary"
+        icon="el-icon-upload"
+        @click="$refs.formUpload.dialog = true">上传文件</el-button>
+      <eFormUpload ref="formUpload"/>
+    </div>
     <!-- 导出 -->
     <div style="display: inline-block;">
       <el-button
@@ -37,8 +47,9 @@
 <script>
 import { parseTime } from '@/utils/index'
 import eForm from './form'
+import eFormUpload from './formUpload'
 export default {
-  components: { eForm },
+  components: { eForm, eFormUpload },
   props: {
     query: {
       type: Object,
@@ -59,7 +70,7 @@ export default {
       queryTypeOptions: [
         { key: 'gpsId', display_name: '模块识别码' },
         { key: 'equipmentNo', display_name: '设备编号' },
-        { key: 'equipmentName', display_name: '设备名' }
+        { key: 'equipmentName', display_name: '设备名称' }
       ]
       // equipmentTypeOptions: [
       //   { key: '1', display_name: '汽车' },
@@ -83,13 +94,13 @@ export default {
     download() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['ID', '模块识别码', '设备编号', '设备名', '状态', '注册日期']
-        const filterVal = ['id', 'gpsId', 'equipmentNo', 'equipmentName', 'enabled', 'createTime']
+        const tHeader = ['ID', '模块识别码', '设备编号', '设备名', '垃圾桶类型', '垃圾类型', '注册日期']
+        const filterVal = ['id', 'gpsId', 'equipmentNo', 'equipmentName', 'trashcanType', 'garbageType', 'createTime']
         const data = this.formatJson(filterVal, this.sup_this.data)
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: 'table-list'
+          filename: '垃圾桶设备-(' + parseTime(new Date()) + ')'
         })
         this.downloadLoading = false
       })
@@ -97,10 +108,8 @@ export default {
     // 数据转换
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'createTime' || j === 'lastPasswordResetTime') {
+        if (j === 'createTime') {
           return parseTime(v[j])
-        } else if (j === 'enabled') {
-          return parseTime(v[j]) ? '启用' : '禁用'
         } else {
           return v[j]
         }

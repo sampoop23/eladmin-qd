@@ -9,6 +9,8 @@ const api = {
     updateAvatarApi: baseUrl + '/api/users/updateAvatar',
     // 上传文件到七牛云
     qiNiuUploadApi: baseUrl + '/api/qiNiuContent',
+    // 上传文件到七牛云
+    equipmentTrashcanUploadApi: baseUrl + '/api/equipment/trashcan/upload',
     // Sql 监控
     sqlApi: baseUrl + '/druid',
     // swagger
