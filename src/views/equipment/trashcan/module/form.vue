@@ -49,8 +49,8 @@
 import { add, edit } from '@/api/equipmentTrashcan'
 import { getDepts } from '@/api/dept'
 import { getAllJob } from '@/api/job'
-import Treeselect from '@riophae/vue-treeselect'
 import { regionData } from 'element-china-area-data'
+import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 export default {

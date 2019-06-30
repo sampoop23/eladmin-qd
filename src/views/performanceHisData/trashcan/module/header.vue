@@ -129,7 +129,7 @@ export default {
         excel.export_json_to_excel({
           header: tHeader,
           data,
-          filename: '垃圾桶实时工况-(' + parseTime(new Date()) + ')'
+          filename: '垃圾桶历史工况-(' + parseTime(new Date()) + ')'
         })
         this.downloadLoading = false
       })

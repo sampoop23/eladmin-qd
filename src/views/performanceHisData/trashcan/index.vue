@@ -80,7 +80,7 @@ import { CodeToText } from 'element-china-area-data'
 import checkPermission from '@/utils/permission'
 import initData from '@/mixins/initData'
 import initDict from '@/mixins/initDict'
-import { del } from '@/api/performanceDataTrashcan'
+import { del } from '@/api/performanceHisDataTrashcan'
 import { getDepts } from '@/api/dept'
 import { parseTime } from '@/utils/index'
 import eHeader from './module/header'
@@ -111,7 +111,7 @@ export default {
     parseTime,
     checkPermission,
     beforeInit() {
-      this.url = 'api/performanceDataTrashcan'
+      this.url = 'api/performanceHisDataTrashcan'
       const sort = 'id,desc'
       this.params = { page: this.page, size: this.size, sort: sort, deptId: this.deptId }
       const query = this.query
